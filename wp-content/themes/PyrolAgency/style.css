@@ -1,0 +1,200 @@
+/*
+Theme Name: PyRol Travel
+Theme URI: pyrolthemes.com
+Author: PyRol
+Author URI: https://www.instagram.com/jairo_a.ka.jhezem/
+Description: This a theme make for Travel Agencies
+Version: 1.0
+*/
+
+* {
+    margin:0;
+    padding:0;
+}
+
+@font-face {
+    font-family: "Nunito";
+    src: url(./assets/fonts/Nunito-Bold.ttf);
+    src: url(./assets/fonts/Nunito-Regular.ttf);
+    src: url(./assets/fonts/Nunito-Light.ttf);
+}
+
+body {
+    font-family: "Nunito", sans-serif !important;
+    overflow-x: hidden;
+}
+
+.home-page{
+    max-width: 100%;
+    height: 80vh;
+    background-image: url("./assets/images/hero-banner.jpg");
+    background-size: cover;
+    background-position: bottom;
+    background-repeat: no-repeat;
+}
+
+.hero-banner{
+    max-width: 100%;
+    height: 80vh;
+    overflow: hidden;
+    background: linear-gradient(#2193b0, #6dd5ed, transparent);
+}
+
+.text-logo{
+    color: #fff;
+    font-weight: 600;
+}
+
+.nav-link {
+    color: #fff !important;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.header-content {
+    text-align: center;
+}
+
+.header-text {
+    margin: 0 50% 0 auto;
+}
+
+section {
+    padding-top: 40px;
+    padding-bottom: 40px;
+}
+
+.destinations {
+    background: #e9effd;
+    width: 100%;
+    height: 100%;
+}
+
+.destinations h1 {
+    color: #3669fa;
+}
+
+.destinations h5 {
+    color: #7b8bb2;
+}
+
+p.destination-title  {
+    color: #666666;
+    font-weight: 800;
+}
+
+.destination-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    column-gap: 20px;
+    row-gap: 20px;
+    margin: 50px;
+}
+
+.activity-list ul li {
+    list-style: none;
+}
+
+.activity-list ul li a {
+    text-decoration: none;
+    color: #7c8bf2;
+    font-size: 18px;
+}
+
+.subscribe-wrapper {
+    overflow: hidden;
+}
+
+.subscribe2-wrapper .subscribe-form input {
+    background: #f2f2f2;
+    border: 1px solid #fff;
+    border-radius: 30px;
+    color: #7359f8;
+    display: inline-block;
+    font-size: 15px;
+    font-weight: 600;
+    height: 57px;
+    margin-right: 17px;
+    padding-left: 35px;
+    width: 70%;
+    cursor: pointer;
+}
+
+.subscribe2-wrapper .subscribe-form input:focus {
+    outline: none;
+}
+
+.subscribe2-wrapper .subscribe-form button {
+    background: #7359f8;
+    border: none;
+    border-radius: 30px;
+    color: #fff;
+    display: inline-block;
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 1;
+    padding: 18px 46px;
+    transition: all 0.3s ease 0s;
+}
+
+
+section.choose-us {
+    background: #e9effd;
+}
+
+.biggest {
+    grid-area: biggest;
+}
+
+.smaller1 {
+    grid-area: smaller1;
+}
+
+.smaller2 {
+    grid-area: smaller2;
+}
+
+.smaller3 {
+    grid-area: smaller3;
+}
+
+.smaller4 {
+    grid-area: smaller4;
+}
+
+
+.card-masonry {
+    justify-content: center;
+    display: grid;
+    grid-template-areas:
+        "biggest smaller1 smaller2"
+        "biggest smaller3 smaller4";
+    grid-template-columns: 300px 300px;
+}
+
+section.no-post {
+    background: #fff;
+}
+
+input.input-error {
+    border: 1px solid red !important;
+}
+
+
+
+
+/*** media query ***/
+
+@media (max-width: 700px) {
+    .header-text {
+        margin: 0 auto;   
+    } 
+
+    .destination-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        column-gap: 10px;
+        row-gap: 10px;
+        margin: 0 auto;
+    }
+}
