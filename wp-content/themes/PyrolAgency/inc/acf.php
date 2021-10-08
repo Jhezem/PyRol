@@ -1,5 +1,6 @@
 <?php
-require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+require_once(ABSPATH . "wp-admin/includes/upgrade.php");
+require_once(ABSPATH . "/wp-content/themes/PyrolAgency/inc/admin-acf.php");
 //Table creation
 
 function tours_table_creation()
@@ -13,24 +14,27 @@ function tours_table_creation()
 
 
     $requirement_t = "CREATE TABLE IF NOT EXISTS " . $requirement_table . "(
+        ID MEDIUMINT NOT NULL AUTO_INCREMENT,
         Id_Requirement INT NOT NULL,
         Requirement_name VARCHAR(50),
-        PRIMARY KEY (Id_Requirement)
+        PRIMARY KEY (ID)
     )$charset;";
     dbDelta($requirement_t);
 
     $hours_t = "CREATE TABLE IF NOT EXISTS " . $hours_table . "(
+        ID MEDIUMINT NOT NULL AUTO_INCREMENT,
         Id_Hour INT NOT NULL,
         time TIME,
-        PRIMARY KEY (Id_Hour)
+        PRIMARY KEY (ID)
     )$charset;";
     dbDelta($hours_t);
 
     $Prices_t = "CREATE TABLE IF NOT EXISTS " . $prices . "(
+        ID MEDIUMINT NOT NULL AUTO_INCREMENT,
         Id_Price INT NOT NULL,
         Price FLOAT,
         Pax INT,
-        PRIMARY KEY (Id_Price)
+        PRIMARY KEY (ID)
     )$charset;";
     dbDelta($Prices_t);
 }
@@ -42,60 +46,140 @@ function theme_register_acf()
 {
     $screen = array("tour");
     add_meta_box(
-        "tours_acf",
-        "Tour Details",
-        "tours_cf",
+        "tours_requirements",
+        "Tour Requirements",
+        "tour_requirements",
+        $screen,
+    );
+
+    add_meta_box(
+        "tours_price",
+        "Tour Prices and Hours",
+        "tour_price",
         $screen,
     );
 }
 
-function tours_cf()
+function tour_requirements()
 {
-?>
 
-    <style type="text/css">
-        span.fa.fa-times-circle {
-            padding: 5px 10px;
-        }
-    </style>
+    requirement_acf();
+}
 
-    <div class="tour_details">
-        <h1>Tour Details</h1>
+function tour_price()
+{
 
-        <div class="tour_requirements">
-            <div class="add_requirement">
-                <input type="text" name="requirement" id="lista_item">
-                <input type="button" id="submit" value="submit">
-            </div>
-            <div class="requirements">
-                <ul></ul>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        (function($) {
-            $(document).ready(function() {
-                let lista = $(".requirements ul");
-                let lista_item = $("#lista_item");
-                let btn = $("#submit");
-
-                btn.click(function() {
-                    lista.append("<li contenteditable='true'>" + lista_item.val() + "<span class='fa fa-times-circle'></span></li>");
-                });
-
-                $(document).on("click", ".requirements ul li", function(event) {
-                    let text = event.target.innerText;
-                    let that = this;
-                    if (text.length == 0) {
-                        that.remove();
-                    }
-                });
-            });
-        })(jQuery);
-    </script>
-
-<?php
+    price_acf();
 }
 
 add_action("admin_init", "theme_register_acf");
+
+function check_if_exist($id, $db, $table){
+    global $wpdb;
+    $db = $wpdb->prefix.$db;
+
+    
+}
+
+function save_tour_data($post_id)
+{
+    $tour_id = get_the_ID();
+    $requirements = explode(",", $_POST['requirements']);
+    $paxs = explode(",", $_POST["pax"]);
+    $prices = explode(",", $_POST["price"]);
+    $hours  = explode(",", $_POST["hour"]);
+
+    global $wpdb;
+
+    foreach ($requirements as $requirement):
+        $wpdb->insert(
+            $wpdb->prefix . "requirements",
+            [
+                "Id_Requirement" => $tour_id,
+                "Requirement_name" => $requirement
+            ]
+        );
+    endforeach;
+
+    foreach ($prices as $price):
+        $n = 0;
+        $wpdb->insert(
+            $wpdb->prefix . "prices",
+            [
+                "Id_Price" => $tour_id,
+                "Price" => $price,
+                "Pax" => $paxs[$n]
+            ]
+        );
+        $n++;
+    endforeach;
+
+    foreach ($hours as $hour):
+        $wpdb->insert(
+            $wpdb->prefix . "hours",
+            [
+                "Id_Hour" => $tour_id,
+                "time" => $hour
+            ]
+        );
+    endforeach;
+
+}
+
+add_action("save_post", "save_tour_data");
+
+function update_tour_data($post_id)
+{
+    //Tour details
+    $tour_id = get_the_ID();
+    $requirements = explode(",", $_POST['requirements']);
+    $paxs = explode(",", $_POST["pax"]);
+    $prices = explode(",", $_POST["price"]);
+    $hours  = explode(",", $_POST["hour"]);
+
+    //ID's of each columns, to update and delete
+    $requirements_id = "";
+    $paxs_id = "";
+    $prices_id = "";
+    $hours_id = "";
+
+    global $wpdb;
+
+    foreach ($requirements as $requirement):
+        $wpdb->update(
+            $wpdb->prefix . "requirements",
+            [
+                "Id_Requirement" => $tour_id,
+                "Requirement_name" => $requirement
+            ],
+            [
+                "Id_Requirement" => $tour_id,
+                "ID" => $requirements_id
+            ]
+        );
+    endforeach;
+
+    foreach ($prices as $price):
+        $n = 0;
+        $wpdb->insert(
+            $wpdb->prefix . "prices",
+            [
+                "Id_Price" => $tour_id,
+                "Price" => $price,
+                "Pax" => $paxs[$n]
+            ]
+        );
+        $n++;
+    endforeach;
+
+    foreach ($hours as $hour):
+        $wpdb->insert(
+            $wpdb->prefix . "hours",
+            [
+                "Id_Hour" => $tour_id,
+                "time" => $hour
+            ]
+        );
+    endforeach;
+
+}

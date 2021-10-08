@@ -19,8 +19,19 @@ function theme_register_scripts(){
     wp_enqueue_script("Bootstrap", get_template_directory_uri()."/bin/bootstrap-5.1.0/js/bootstrap.min.js", array(), "5.1.0", true); 
 }
 
+function admin_register_styles(){
+    wp_enqueue_style("Admin Styles", get_template_directory_uri()."/assets/css/admin-acf.css", array(), $GLOBALS["version"], "all");
+}
+
+function admin_register_scripts(){
+    wp_enqueue_script("Admin js", get_template_directory_uri() . "/assets/js/admin-acf.js", array(), $GLOBALS["version"], true);
+}
+
 add_action("wp_enqueue_scripts", "theme_register_style");
 add_action("wp_enqueue_scripts", "theme_register_scripts");
+add_action( 'admin_enqueue_scripts', 'admin_register_styles');
+add_action( 'admin_enqueue_scripts', 'admin_register_scripts');
+
 add_action("after_setup_theme", "theme_support");
 add_theme_support( 'post-thumbnails' );
 
